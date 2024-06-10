@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Mapa de Serpientes</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <link rel="shortcut icon" href="img/logo-snake.png" type="image/x-icon">
+        <style>
+            body, html, #map {
+                height: 100%;
+                margin: 0;
+            }
+            .species-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+            }
+            .species-info {
+                flex: 0 0 40%; /* Cada elemento toma el 40% del ancho del contenedor */
+                margin: 5px;
+                text-align: center;
+            }
+            .species-info img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 50%;
+            }
+            .species-details {
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+    
+    <div class="container-fluid deal bg-primary my-5 py-5">
+        <div class="container py-5">
+            <div class="row g-5 align-items-center">
+                <!--div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                    <img class="img-fluid animated pulse infinite" src="img/snake-with-pin-map-location-logo-symbol-icon-design-illustration-vector-removebg-preview.png">
+                </div -->
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                    <center>
+                        <div id="map-container">
+                            <div id="map" style="min-height: 500px; min-width: 700px"></div>
+                        </div>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([10.407743036098857, -73.24042861713178], 16); // Coordenadas iniciales del mapa
+    
+        L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        }).addTo(map);
+    
+        // Definir las coordenadas de las zonas y sus colores
+        var zones = [
+        {
+            coords: [
+                [10.408090551655663, -73.24046290696822], // Esquina superior izquierda
+                [10.407696092597028, -73.23963991275305], // Esquina superior derecha
+                [10.407293165146546, -73.23960577380745], // Esquina inferior derecha
+                [10.407268914866734, -73.24046683387961]  // Esquina inferior izquierda
+            ],
+            color: 'green',
+            name: 'Zona 1'
+        },
+        {
+            coords: [
+                [10.40720992544332, -73.24036613759348], // Esquina superior izquierda
+                [10.407196735026716, -73.23938981356073], // Esquina superior derecha
+                [10.40548719708823, -73.23932503367648], // Esquina inferior derecha
+                [10.40548439455424, -73.24033514671373]  // Esquina inferior izquierda
+            ],
+            color: 'blue',
+            name: 'Zona 2'
+        },
+        {
+            coords: [
+                [10.40721403166544, -73.23933974115332], // Esquina superior izquierda
+                [10.407271480503558, -73.2385098027602], // Esquina superior derecha
+                [10.405386801969891, -73.23592872328784], // Esquina inferior derecha
+                [10.405453922260605, -73.23924701268541]  // Esquina inferior izquierda
+            ],
+            color: 'red',
+            name: 'Zona 3'
+        },
+        {
+            coords: [
+                [10.405451270082466, -73.24032352846956], // Esquina superior izquierda
+                [10.405377041410445, -73.23592415159034], // Esquina superior derecha
+                [10.402387456782154, -73.23709179431872], // Esquina inferior derecha
+                [10.403090205793141, -73.24025597864595]  // Esquina inferior izquierda
+            ],
+            color: 'red',
+            name: 'Zona 4'
+            },
+        ];
+    
+        // Crear las zonas en el mapa
+        zones.forEach(function (zone) {
+            L.polygon(zone.coords, {
+                color: zone.color, // Color del borde del polígono
+                fillColor: zone.color, // Color de relleno del polígono
+                fillOpacity: 0.3 // Opacidad del relleno (0 = completamente transparente, 1 = completamente opaco)
+            }).addTo(map);
+        });
+    
+        var speciesData = {
+            "10.407613793469443,-73.24006918123251": [
+            {
+                name: "Cascabel",
+                image: "https://png.pngtree.com/png-vector/20231101/ourmid/pngtree-portrait-of-a-rattlesnake-animal-png-image_10387215.png",
+                details: "Color: Varía entre el marrón y el gris. <br>Venenosa: Si<br>"
+            },
+            {
+                name: "Boa",
+                image: "https://png.pngtree.com/png-vector/20231123/ourmid/pngtree-boa-constrictor-wildlife-studio-png-image_10658955.png",
+                details: "Color: Café bronceado a gris. <br>Venenosa: No<br>"
+            },
+            {
+                name: "Falsa Mapaná",
+                image: "img/falsa-mapana.png",
+                details: "Color: Crema o amarillento-blanquecino. <br>Venenosa: Si<br>"
+            },
+            {
+                name: "Falsa Coral",
+                image: "img/falsa-coral.png",
+                details: "Color: Bandas alternadas de rojo, negro y amarillo; o blanco, negro y rojo. <br>Venenosa: No<br>"
+            },
+            {
+                name: "Mapaná rabo seco",
+                image: "img/rabo_seco.png",
+                details: "Color: café tierra, con marcas cafés o manchas dorsales negras. <br>Venenosa: No<br>"
+            }
+        ],
+        
+        "10.406463423082316,-73.23983184261428": [
+            {
+                name: "Cascabel",
+                image: "https://png.pngtree.com/png-vector/20231101/ourmid/pngtree-portrait-of-a-rattlesnake-animal-png-image_10387215.png",
+                details: "Color: Varía entre el marrón y el gris. <br>Venenosa: Si<br>"
+            },
+            {
+                name: "Boa",
+                image: "https://png.pngtree.com/png-vector/20231123/ourmid/pngtree-boa-constrictor-wildlife-studio-png-image_10658955.png",
+                details: "Color: Café bronceado a gris. <br>Venenosa: No<br>"
+            },
+            {
+                name: "Falsa Mapaná",
+                image: "img/falsa-mapana.png",
+                details: "Color: Crema o amarillento-blanquecino. <br>Venenosa: Si<br>"
+            },
+            {
+                name: "Falsa Coral",
+                image: "img/falsa-coral.png",
+                details: "Color: Bandas alternadas de rojo, negro y amarillo; o blanco, negro y rojo. <br>Venenosa: No<br>"
+            },
+            {
+                name: "Mapaná rabo seco",
+                image: "img/rabo_seco.png",
+                details: "Color: café tierra, con marcas cafés o manchas dorsales negras. <br>Venenosa: No<br>"
+            }
+        ],
+
+        "10.40536597588805,-73.23846391608488": [
+            {
+                name: "Cascabel",
+                image: "https://png.pngtree.com/png-vector/20231101/ourmid/pngtree-portrait-of-a-rattlesnake-animal-png-image_10387215.png",
+                details: "Color: Varía entre el marrón y el gris. <br>Venenosa: Si<br>"
+            },
+            {
+                name: "Boa",
+                image: "https://png.pngtree.com/png-vector/20231123/ourmid/pngtree-boa-constrictor-wildlife-studio-png-image_10658955.png",
+                details: "Color: Café bronceado a gris. <br>Venenosa: No<br>"
+            },
+            {
+                name: "Falsa Mapaná",
+                image: "img/falsa-mapana.png",
+                details: "Color: Crema o amarillento-blanquecino. <br>Venenosa: Si<br>"
+            },
+            {
+                name: "Falsa Coral",
+                image: "img/falsa-coral.png",
+                details: "Color: Bandas alternadas de rojo, negro y amarillo; o blanco, negro y rojo. <br>Venenosa: No<br>"
+            },
+            {
+                name: "Mapaná rabo seco",
+                image: "img/rabo_seco.png",
+                details: "Color: café tierra, con marcas cafés o manchas dorsales negras. <br>Venenosa: No<br>"
+            }
+        ]
+    };
+    
+        // Definir coordenadas específicas y agregar marcadores
+        var markersData = [
+            { coords: [10.407613793469443, -73.24006918123251], iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png', name: 'Zona 1 (MENOR AVISTAMIENTO)' },
+            { coords: [10.406463423082316, -73.23983184261428], iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png', name: 'Zona 2 (MENOR ÍNDICE)' },
+            { coords: [10.40536597588805, -73.23846391608488], iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png', name: 'Zona 3 (MAYOR AVISTAMIENTO)' }
+        ];
+    
+        markersData.forEach(function (markerData) {
+            var marker = L.marker(markerData.coords, {
+                icon: L.icon({
+                    iconUrl: markerData.iconUrl,
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34]
+                })
+            }).addTo(map);
+            
+            marker.bindTooltip(markerData.name, { permanent: false, direction: "top" });
+            
+            marker.on('click', function (e) {
+                showSpecies(markerData.coords[0], markerData.coords[1]);
+            });
+        });
+    
+        function showSpecies(latitude, longitude) {
+            var key = latitude + "," + longitude;
+            var species = speciesData[key];
+            if (species) {
+                var popupContent = '<div class="species-container">';
+                species.forEach(function (specie) {
+                    popupContent += '<div class="species-info">';
+                    popupContent += '<h4>' + specie.name + '</h4>';
+                    popupContent += '<img src="' + specie.image + '" alt="' + specie.name + '">';
+                    popupContent += '<div class="species-details">' + specie.details + '</div>';
+                    popupContent += '</div>';
+                });
+                popupContent += '</div>';
+                var speciesContainer = document.createElement('div');
+                speciesContainer.innerHTML = popupContent;
+                var popup = L.popup()
+                    .setLatLng([latitude, longitude])
+                    .setContent(speciesContainer)
+                    .openOn(map);
+            } else {
+                alert("No se encontraron especies en esta ubicación.");
+            }
+        }
+    
+        // Mostrar coordenadas al hacer clic en el mapa
+        map.on('click', function (e) {
+            var latLng = e.latlng;
+            L.popup()
+                .setLatLng(latLng)
+                .setContent(latLng.lat + ", " + latLng.lng)
+                .openOn(map);
+        });
+    
+    </script>
+    
+    </body>
+    </html>
