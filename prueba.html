@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #contenido {
+            display: none;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
+    </style>
+    </head>
+    <body>
+    
+    <button onclick="mostrarContenido()">Mostrar Contenido</button>
+    <div id="contenido">
+        <p>Este es el contenido desplegable...</p>
+    </div>
+    
+    <script>
+        function mostrarContenido() {
+            var contenido = document.getElementById("contenido");
+            if (contenido.style.display === "none") {
+                contenido.style.display = "block";
+            } else {
+                contenido.style.display = "none";
+            }
+        }
+    </script>
+    
+
+
+
+
+
+</body>
+</html>
